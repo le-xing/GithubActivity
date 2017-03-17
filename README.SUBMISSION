@@ -1,0 +1,21 @@
+swap1.sh
+    This shell script is executed in the nginx container. It changes the proxy_pass in the nginx.config file from web2 to web1.
+
+swap2.sh
+    This shell script is executed in the nginx container. It changes the proxy_pass in the nginx.config file from web1 to web2.
+
+doswap.sh
+    This shell script automates the swapping process between two dockers. 
+    1) Accepts only one argument, the name of a docker image that is to be run.
+    2) Checks to see if the docker image exists.
+    3) Looks for the current "live" container with either name web1 or web2.
+    4) Runs the new container in the network with the name that is not being used by the "live" container.
+    5) Calls the appropriate swap script in the proxy container.
+    6) Removes the old container.
+
+If the swap is done manually, the following commands should be executed after dorun.sh is called to switch to the new activity.
+    docker run -d --network ecs189_default --name web2 activitynew
+    docker exec ecs189_proxy_1 /bin/bash /bin/swap2.sh
+    docker ps -a
+    docker rm -f *web1_SHA*
+To swap back to the old activity, the same commands are used but web1 should be used as the name when run is called, swap1.sh should be executed, and the container of the previous activity should be removed using its SHA.
