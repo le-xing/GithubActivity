@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Vincent on 10/1/2017.
- */
 public class GithubQuerier {
 
     private static final String BASE_URL = "https://api.github.com/users/";
@@ -57,20 +54,17 @@ public class GithubQuerier {
             json = event.getJSONObject("payload");
             commits = json.getJSONArray("commits");
 
+            sb.append("<br/> <p> <font size = \"4\"> Commits </font> </p>");
+            sb.append("<style> table { border-collapse: collapse; } td, th { border: 1px solid #dddddd; text-align: left; padding: 8px; width: 500px;}  </style>");
+            sb.append("<table> <tr> <th>SHA</th> <th>Message</th>");
             for(int j = 0; j < commits.length(); j++) {
 
                 singleCommit = commits.getJSONObject(j);
                 SHA = singleCommit.getString("sha");
                 message = singleCommit.getString("message");
-
-                sb.append("<strong>" + "SHA: " + "</strong>" + SHA + "<br>");
-                sb.append("<strong>"+ "Message: " + "</strong>" + message);
-                sb.append("<br>");
-                sb.append("<hr>");
-
+		        sb.append("<tr> <td>" + SHA + "</td> <td>" + message + "</td> </tr>");
             }
-
-
+            sb.append("</table> <hr>");
             sb.append("</div>");
 
         }
